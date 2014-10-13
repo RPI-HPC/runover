@@ -1,0 +1,37 @@
+Summary: Run a script over several hosts.
+Name: @PACKAGE@
+Version: @VERSION@
+Release: 1
+License: UNKNOWN
+Group: System Environment/Shells
+Source0: %{name}-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+%description
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%makeinstall
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+
+%files
+%defattr(-,root,root,-)
+%doc config-script.sh machine-script.sh
+%{_bindir}/runover
+%{_mandir}/man1/runover.1*
+%dir /etc/runover
+
+%changelog
+* Thu Feb 24 2005 R. Lindsay Todd <toddr@rpi.edu> - 
+- Initial build.
+

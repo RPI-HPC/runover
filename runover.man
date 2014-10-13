@@ -1,0 +1,103 @@
+.TH runover 1
+
+.SH NAME
+runover \- run scripts on multiple hosts
+
+.SH SYNOPSIS
+
+.B runover
+.RB [ \-np
+.IR NP ]
+.RB [ \-machinefile
+.IR MF ]
+.RB [ \-stdin
+.IR INTEMP ]
+.RB [ \-stdout
+.IR OUTTEMP ]
+.RB [ \-stderr
+.IR ERRTEMP ]
+.I SCRIPT ARGS ...
+
+.SH DESCRIPTION
+
+.PP
+The
+.B runover
+program runs a script on multiple hosts.
+A machine file specifies each host processor that may be used;
+a host processor may be mentioned multiple times if multiple
+instances of the script may be run simultaneously.
+The script name, arguments,
+and path names for input and output are all treated as templates
+with several substitutions defined.
+
+.SH OPTIONS
+
+.TP
+.BI -np\  NP
+Run a total of
+.I NP
+processes.
+If this is not specified, a single process is run on each
+machine specified by the machine file.
+If
+.I NP
+is greater than the number of machines in the machine file,
+then machines are reused.
+.TP
+.BI -machinefile\  MACHINEFILE
+List of machines to use.
+A machine may be specified multiple times;
+for each occurrence, a process may be run simultaneously.
+.TP
+.BI -stderr\  ERRTEMP
+Path template for standard error output files.
+.TP
+.BI -stdin\  INTEMP
+Path template for standard input files.
+.TP
+.BI -stdout\  OUTTEMP
+Path template for standard output files.
+
+.SH TEMPLATE PROCESSING
+
+.PP
+The
+.B runover
+command will perform the following substitutions on the script name,
+the script arguments,
+and the path name templates ERRTEMP, INTEMP, and OUTTEMP:
+.TP
+.B %j
+Replace this with the current job number,
+as specified by the configuration script.
+This is typically a job number from a job control system
+such as
+.B DQS
+or
+.B PBS.
+.TP
+.B %p
+Replace this with the current process number.
+
+.SH EXAMPLES
+
+.TP
+.B runover -stdout out%j.%p myjob dataset.%p
+Invokes
+.B runover
+with a standard set of machines.
+If this is a batch job, e.g., through
+.BR DQS ,
+then the set of machines are those assigned by the batch system.
+Output will go to files with names beginning with "out",
+followed by the job name assigned by the batch system, followed by
+a period, then the process number.  The script will be stored in
+.IR myjob .
+
+
+.SH FILES
+
+.I /etc/runover/config-script.sh
+
+.I /etc/runover/machine-script.sh
