@@ -1,0 +1,6 @@
+* Relative path names should be made absolute.
+
+* Preserve current working directory (or specify it).
+
+* If a script is given as a file name, run it even if "." is not on
+  PATH.
